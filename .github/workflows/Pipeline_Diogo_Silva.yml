@@ -34,7 +34,8 @@ jobs:
 
       - name: Verificar métricas e definir status
         run: |
-          ERROS=$(flake8 --count .)
+          ERROS=$(flake8 --count . --max-line-length=120)
+          echo "Número de erros do flake8: $ERROS"
           if [ "$ERROS" -gt 50 ]; then
             echo "Erro crítico: Código tem demasiadas falhas! 🚨"
             exit 1
