@@ -1,10 +1,3 @@
-name: CI Pipeline
-
-on:
-  push:
-  pull_request:
-  workflow_dispatch:
-
 jobs:
   static-analysis:
     name: Análise Estática
@@ -30,11 +23,11 @@ jobs:
 
       - name: Executar Flake8
         run: |
-          flake8 --statistics --count --exit-zero . | tee flake8-report.txt || true
+          flake8 --statistics --count --max-line-length=120 . | tee flake8-report.txt || true
 
       - name: Verificar métricas e definir status
         run: |
-          ERROS=$(flake8 --count . --max-line-length=120)
+          ERROS=$(flake8 --count . --max-line-length=120 . | tail -n 1 | awk '{print $1}')
           echo "Número de erros do flake8: $ERROS"
           if [ "$ERROS" -gt 50 ]; then
             echo "Erro crítico: Código tem demasiadas falhas! 🚨"
@@ -54,6 +47,7 @@ jobs:
           path: |
             pylint-report.txt
             flake8-report.txt
+
 
   dynamic-analysis:
     name: Análise Dinâmica
