@@ -76,11 +76,12 @@ jobs:
 
       - name: Executar Testes
         run: |
-          pytest --maxfail=5 --disable-warnings | tee test-report.txt || true
+          pytest --maxfail=5 --disable-warnings | tee test-report.txt
 
       - name: Analisar Resultados dos Testes
         run: |
           FALHAS=$(grep -o "FAILED" test-report.txt | wc -l)
+          echo "Falhas encontradas: $FALHAS"
           if [ "$FALHAS" -gt 0 ]; then
             echo "Erro: Alguns testes falharam! 🚨"
             exit 1
